@@ -37,7 +37,7 @@ app.post("/users", (req, res) => {
           message: "Not found",
         });
       } else {
-        res.json({ success: true, message: data });
+        res.json({ success: true, data: data });
       }
     }
   );
