@@ -20,6 +20,24 @@ const app = express();
 
 app.use(bodyParser.json());
 
+function sendResponse() {
+  if (err) {
+    res.json({
+      success: false,
+      message: err,
+    });
+  } else if (!data) {
+    res.json({
+      message: " not found",
+      success: false,
+    });
+  } else {
+    res.json({
+      data: data,
+      success: true,
+    });
+  }
+}
 // CREATE
 app.post("/users", (req, res) => {
   User.create(
@@ -29,16 +47,7 @@ app.post("/users", (req, res) => {
       password: req.body.newData.password,
     },
     (err, data) => {
-      if (err) {
-        res.json({ success: false, message: err });
-      } else if (!data) {
-        res.json({
-          success: false,
-          message: "Not found",
-        });
-      } else {
-        res.json({ success: true, data: data });
-      }
+      sendResponse(res, err, data);
     }
   );
 });
@@ -62,38 +71,14 @@ app
         new: true,
       },
       (err, data) => {
-        if (err) {
-          res.json({
-            success: false,
-            message: err,
-          });
-        } else if (!data) {
-          res.json({
-            success: false,
-            message: "Not Found",
-          });
-        } else {
-          res.json({
-            success: true,
-            data: data,
-          });
-        }
+        sendResponse(res, err, data);
       }
     );
   })
   // DELETE
   .delete((req, res) => {
     User.findByIdAndDelete(req.params.id, (err, data) => {
-      if (err) {
-        res.json({ success: false, message: err });
-      } else if (!data) {
-        res.json({ success: false, message: "Not found" });
-      } else {
-        res.json({
-          success: true,
-          data: data,
-        });
-      }
+      sendResponse(res, err, data);
     });
   });
 
