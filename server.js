@@ -42,9 +42,7 @@ function sendResponse() {
 app.post("/users", (req, res) => {
   User.create(
     {
-      name: req.body.newData.name,
-      email: req.body.newData.email,
-      password: req.body.newData.password,
+      ...req.body.newData,
     },
     (err, data) => {
       sendResponse(res, err, data);
@@ -62,11 +60,7 @@ app
   .put((req, res) => {
     User.findByIdAndUpdate(
       req.params.id,
-      {
-        name: req.body.newData.name,
-        email: req.body.newData.email,
-        password: req.body.newData.password,
-      },
+      { ...req.body.newData },
       {
         new: true,
       },
